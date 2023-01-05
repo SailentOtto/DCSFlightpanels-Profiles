@@ -1,0 +1,243 @@
+#IMPORTANT NOTES about configuration:
+#GENERIC PZ69RadioPanel (only COM1 profile used): upper displays - HDG, RPM; lower displays - fuel (map any button and press), BOOST; both DIALS (diff steps): Altimeter Pressure Set
+#PZ70MultiPanel (only ALT profile used): upper display - Altitude MSL (ft), lower display - Indicated Airspeed; HDG - A radio channel, NAV - B, IAS - C, ALT - D; 
+#PZ70MultiPanel: Knob - Gun Sight Light; Flaps UP/DOWN - gunsight tint screen up/down; Auto throttle - Gunsight Master ON/OFF
+#Scripts created by http://www.captzeen.com/helios/create_formula.asp
+
+#This file can be manually edited using any ASCII editor.
+#File created on 05.01.2023 00:00:00 05.01.2023 19:38:14#
+#
+#IMPORTANT INFO REGARDING the keyboard key AltGr (RAlt as named in DCS) or RMENU as named DCSFP
+#When you press AltGr DCSFP will register RMENU + LCONTROL. This is a bug which "just is". You need to modify that in the profile
+#by deleting the + LCONTROL part.
+#So for example AltGr + HOME pressed on the keyboard becomes RMENU + LCONTROL + HOME
+#Open text editor and delete the LCONTROL ==> RMENU + HOME
+#Supported panels :
+#   PZ55SwitchPanel
+#   PZ69RadioPanel
+#   PZ70MultiPanel
+#   BackLitPanel
+#   StreamDeckMini
+#   StreamDeck
+#   StreamDeckXL
+
+#  ***Do not change the location nor content of the line below***
+Profile=37
+EmulationModesFlag=3
+UseGenericRadio=True
+
+PanelType=PZ69RadioPanel
+PanelInstanceID=\\?\hid#vid_06a3&pid_0d05#8&2e7aec44&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+BindingHash=6cb6965b9be4dc88bc34610bbba03bf4
+BeginPanel
+	RadioPanelDCSBIOSLCD{LowerCOM1}\o/{LOWER_STBY_RIGHT}\o/DCSBiosOutputFormula{((BOOSTGAUGE*0,00047)+-7)}\o/{True|1}
+	RadioPanelDCSBIOSLCD{UpperCOM1}\o/{UPPER_ACTIVE_LEFT}\o/DCSBiosOutput{HDG_DEG|Equals|0}\o/{False|0}
+	RadioPanelDCSBIOSLCD{UpperCOM1}\o/{UPPER_STBY_RIGHT}\o/DCSBiosOutputFormula{((PROP*0,04578)+100)}\o/{False|0}
+	RadioPanelDCSBIOSLCD{LowerCOM1}\o/{LOWER_ACTIVE_LEFT}\o/DCSBiosOutputFormula{Ifless( FUELRESERVEGAUGE 6554 ( (FUELRESERVEGAUGE*0,00015)+-1) ((0,00063*(FUELRESERVEGAUGE-6554))+0))}\o/{False|0}
+	RadioPanelDCSBIOSControlV2{2}\o/{UpperCOM1}\o/{UpperLargeFreqWheelInc|ALT_MBAR}\o/\o/DCSBIOSInput{ALT_MBAR|VARIABLE_STEP|1000|0}
+	RadioPanelDCSBIOSControlV2{2}\o/{UpperCOM1}\o/{UpperLargeFreqWheelDec|ALT_MBAR}\o/\o/DCSBIOSInput{ALT_MBAR|VARIABLE_STEP|-1000|0}
+	RadioPanelDCSBIOSControlV2{2}\o/{UpperCOM1}\o/{UpperSmallFreqWheelInc|ALT_MBAR}\o/\o/DCSBIOSInput{ALT_MBAR|VARIABLE_STEP|100|0}
+	RadioPanelDCSBIOSControlV2{2}\o/{UpperCOM1}\o/{UpperSmallFreqWheelDec|ALT_MBAR}\o/\o/DCSBIOSInput{ALT_MBAR|VARIABLE_STEP|-100|0}
+EndPanel
+
+PanelType=PZ70MultiPanel
+PanelInstanceID=\\?\hid#vid_06a3&pid_0d06#8&83737d2&0&0000#{4d1e55b2-f16f-11cf-88cb-001111000030}
+BindingHash=55a2278e8a683222fe7f700c4d3f5f3c
+BeginPanel
+	MultiPanelDCSBIOSControlV2{2}\o/{ALT}\o/{FLAPS_LEVER_UP|GUNSIGHT_TINT}\o/\o/DCSBIOSInput{GUNSIGHT_TINT|SET_STATE|1|0}
+	MultiPanelDCSBIOSControlV2{2}\o/{ALT}\o/{FLAPS_LEVER_DOWN|GUNSIGHT_TINT}\o/\o/DCSBIOSInput{GUNSIGHT_TINT|SET_STATE|0|0}
+	MultiPanelDCSBIOSControlV2{0}\o/{ALT}\o/{AUTO_THROTTLE|GUNSIGHT_SWITCH}\o/\o/DCSBIOSInput{GUNSIGHT_SWITCH|SET_STATE|0|0}
+	MultiPanelDCSBIOSControlV2{2}\o/{ALT}\o/{AUTO_THROTTLE|GUNSIGHT_SWITCH}\o/\o/DCSBIOSInput{GUNSIGHT_SWITCH|SET_STATE|1|0}
+	MultiPanelDCSBIOSControlV2{2}\o/{ALT}\o/{LCD_WHEEL_DEC|GUNSIGHT_DIMMER}\o/\o/DCSBIOSInput{GUNSIGHT_DIMMER|VARIABLE_STEP|-500|0}
+	MultiPanelDCSBIOSControlV2{2}\o/{ALT}\o/{LCD_WHEEL_INC|GUNSIGHT_DIMMER}\o/\o/DCSBIOSInput{GUNSIGHT_DIMMER|VARIABLE_STEP|500|0}
+	MultiPanelDCSBIOSControlV2{2}\o/{ALT}\o/{HDG_BUTTON|RCTRL_A}\o/\o/DCSBIOSInput{RCTRL_A|ACTION|TOGGLE|0}
+	MultiPanelDCSBIOSControlV2{0}\o/{ALT}\o/{HDG_BUTTON|RCTRL_A}\o/\o/DCSBIOSInput{RCTRL_A|SET_STATE|0|0}
+	MultiPanelDCSBIOSControlV2{2}\o/{ALT}\o/{NAV_BUTTON|RCTRL_B}\o/\o/DCSBIOSInput{RCTRL_B|ACTION|TOGGLE|0}
+	MultiPanelDCSBIOSControlV2{0}\o/{ALT}\o/{NAV_BUTTON|RCTRL_B}\o/\o/DCSBIOSInput{RCTRL_B|SET_STATE|0|0}
+	MultiPanelDCSBIOSControlV2{2}\o/{ALT}\o/{IAS_BUTTON|RCTRL_C}\o/\o/DCSBIOSInput{RCTRL_C|ACTION|TOGGLE|0}
+	MultiPanelDCSBIOSControlV2{0}\o/{ALT}\o/{IAS_BUTTON|RCTRL_C}\o/\o/DCSBIOSInput{RCTRL_C|SET_STATE|0|0}
+	MultiPanelDCSBIOSControlV2{2}\o/{ALT}\o/{ALT_BUTTON|RCTRL_D}\o/\o/DCSBIOSInput{RCTRL_D|ACTION|TOGGLE|0}
+	MultiPanelDCSBIOSControlV2{0}\o/{ALT}\o/{ALT_BUTTON|RCTRL_D}\o/\o/DCSBIOSInput{RCTRL_D|SET_STATE|0|0}
+	MultiPanelDCSBIOSControlLCD{ALT}\o/{UpperLCD}\o/DCSBiosOutput{ALT_MSL_FT|Equals|0}
+	MultiPanelDCSBIOSControlLCD{ALT}\o/{LowerLCD}\o/DCSBiosOutput{IAS_US_INT|Equals|0}
+	MultiPanelDCSBIOSControlLCD{VS}\o/{UpperLCD}\o/DCSBiosOutput{PROP|Equals|0}
+	MultiPanelDCSBIOSControlLCD{VS}\o/{LowerLCD}\o/DCSBiosOutput{HDG_DEG|Equals|0}
+EndPanel
+
+
+#--------------------------------------------------------------------
+#Below are all the Virtual Keycodes in use listed. You can manually edit this file using these codes.
+#	LBUTTON
+#	RBUTTON
+#	CANCEL
+#	MBUTTON
+#	XBUTTON1
+#	XBUTTON2
+#	BACK
+#	TAB
+#	CLEAR
+#	RETURN
+#	SHIFT
+#	CONTROL
+#	MENU
+#	PAUSE
+#	CAPITAL
+#	KANA
+#	HANGEUL
+#	HANGUL
+#	JUNJA
+#	FINAL
+#	HANJA
+#	KANJI
+#	ESCAPE
+#	CONVERT
+#	NONCONVERT
+#	ACCEPT
+#	MODECHANGE
+#	SPACE
+#	PRIOR
+#	NEXT
+#	END
+#	HOME
+#	LEFT
+#	UP
+#	RIGHT
+#	DOWN
+#	SELECT
+#	PRINT
+#	EXECUTE
+#	SNAPSHOT
+#	INSERT
+#	DELETE
+#	HELP
+#	VK_0
+#	VK_1
+#	VK_2
+#	VK_3
+#	VK_4
+#	VK_5
+#	VK_6
+#	VK_7
+#	VK_8
+#	VK_9
+#	VK_A
+#	VK_B
+#	VK_C
+#	VK_D
+#	VK_E
+#	VK_F
+#	VK_G
+#	VK_H
+#	VK_I
+#	VK_J
+#	VK_K
+#	VK_L
+#	VK_M
+#	VK_N
+#	VK_O
+#	VK_P
+#	VK_Q
+#	VK_R
+#	VK_S
+#	VK_T
+#	VK_U
+#	VK_V
+#	VK_W
+#	VK_X
+#	VK_Y
+#	VK_Z
+#	LWIN
+#	RWIN
+#	APPS
+#	SLEEP
+#	NUMPAD0
+#	NUMPAD1
+#	NUMPAD2
+#	NUMPAD3
+#	NUMPAD4
+#	NUMPAD5
+#	NUMPAD6
+#	NUMPAD7
+#	NUMPAD8
+#	NUMPAD9
+#	MULTIPLY
+#	ADD
+#	SEPARATOR
+#	SUBTRACT
+#	DECIMAL
+#	DIVIDE
+#	F1
+#	F2
+#	F3
+#	F4
+#	F5
+#	F6
+#	F7
+#	F8
+#	F9
+#	F10
+#	F11
+#	F12
+#	F13
+#	F14
+#	F15
+#	F16
+#	F17
+#	F18
+#	F19
+#	F20
+#	F21
+#	F22
+#	F23
+#	F24
+#	NUMLOCK
+#	SCROLL
+#	LSHIFT
+#	RSHIFT
+#	LCONTROL
+#	RCONTROL
+#	LMENU
+#	RMENU
+#	BROWSER_BACK
+#	BROWSER_FORWARD
+#	BROWSER_REFRESH
+#	BROWSER_STOP
+#	BROWSER_SEARCH
+#	BROWSER_FAVORITES
+#	BROWSER_HOME
+#	VOLUME_MUTE
+#	VOLUME_DOWN
+#	VOLUME_UP
+#	MEDIA_NEXT_TRACK
+#	MEDIA_PREV_TRACK
+#	MEDIA_STOP
+#	MEDIA_PLAY_PAUSE
+#	LAUNCH_MAIL
+#	LAUNCH_MEDIA_SELECT
+#	LAUNCH_APP1
+#	LAUNCH_APP2
+#	OEM_1
+#	OEM_PLUS
+#	OEM_COMMA
+#	OEM_MINUS
+#	OEM_PERIOD
+#	OEM_2
+#	OEM_3
+#	OEM_4
+#	OEM_5
+#	OEM_6
+#	OEM_7
+#	OEM_8
+#	OEM_102
+#	PROCESSKEY
+#	PACKET
+#	ATTN
+#	CRSEL
+#	EXSEL
+#	EREOF
+#	PLAY
+#	ZOOM
+#	NONAME
+#	PA1
+#	OEM_CLEAR
+#	VK_NULL
